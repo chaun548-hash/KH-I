@@ -49,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation, onReplayIntr
       >
         <div className="w-10 h-10 rounded-full bg-white p-0.5 shadow-md shadow-[#0066ee]/40 overflow-hidden shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
           <img
-            src="/logo.png"
+            src="./logo.png"
             alt="KHỞI AGENCY Logo"
             className="w-full h-full object-cover rounded-full"
             onError={(e) => {

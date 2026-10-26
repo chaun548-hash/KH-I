@@ -228,3 +228,53 @@
   font-family: var(--font-serif);
   font-style: italic;
 }
+
+
+/* Consultation form: consistent readable fields across screen sizes */
+.fld {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.fld label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: rgba(238, 244, 255, 0.9);
+}
+.fld input,
+.fld select,
+.fld textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 0.82rem 0.95rem;
+  color: #eef4ff;
+  font: inherit;
+  font-size: 0.875rem;
+  background-color: rgba(4, 17, 50, 0.8);
+  border: 1px solid rgba(168, 200, 255, 0.28);
+  border-radius: 0.8rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.fld input::placeholder,
+.fld textarea::placeholder {
+  color: rgba(238, 244, 255, 0.42);
+}
+.fld input:focus,
+.fld select:focus,
+.fld textarea:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+}
+.fld select option {
+  color: #eef4ff;
+  background-color: #081632;
+}
+.fld textarea {
+  min-height: 6.5rem;
+  resize: vertical;
+}

@@ -13,8 +13,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialServiceOr
   const [selectedPackage, setSelectedPackage] = useState('Combo Bứt Phá (Khuyên dùng)');
   const [budget, setBudget] = useState('10 - 20 triệu');
   const [message, setMessage] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submittedCode, setSubmittedCode] = useState<string | null>(null);
+  const [draftReady, setDraftReady] = useState(false);
+  const [copyFeedback, setCopyFeedback] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
   // Update selected package if passed from props
@@ -29,32 +29,43 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialServiceOr
     }
   }, [initialServiceOrPackage]);
 
+  const draftSummary = [
+    'YÊU CẦU TƯ VẤN - KHỞI AGENCY',
+    `Họ và tên: ${fullName}`,
+    `Số điện thoại/Zalo: ${phone}`,
+    `Email: ${email || 'Chưa cung cấp'}`,
+    `Dịch vụ quan tâm: ${selectedPackage}`,
+    `Ngân sách: ${budget}`,
+    `Nội dung: ${message || 'Chưa cung cấp'}`,
+  ].join('\n');
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
-
     if (!fullName.trim()) {
       setErrorMsg('Vui lòng nhập họ và tên của bạn.');
       return;
     }
-
     if (!phone.trim()) {
-      setErrorMsg('Vui lòng nhập số điện thoại hoặc Zalo để KHỞI liên hệ.');
+      setErrorMsg('Vui lòng nhập số điện thoại hoặc Zalo.');
       return;
     }
+    // GitHub Pages is static: never claim a message was delivered without a receiver.
+    setDraftReady(true);
+  };
 
-    setIsSubmitting(true);
-
-    // Simulate reliable consultation submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      const randomCode = 'KHOI-' + Math.floor(1000 + Math.random() * 9000);
-      setSubmittedCode(randomCode);
-    }, 600);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(draftSummary);
+      setCopyFeedback('Đã sao chép. Hãy gửi nội dung đến kênh liên hệ chính thức của KHỞI.');
+    } catch {
+      setCopyFeedback('Không thể tự động sao chép. Bạn có thể chọn và sao chép nội dung trong khung.');
+    }
   };
 
   const handleReset = () => {
-    setSubmittedCode(null);
+    setDraftReady(false);
+    setCopyFeedback('');
     setFullName('');
     setPhone('');
     setEmail('');
@@ -153,45 +164,32 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialServiceOr
           {/* Right Column: Interactive Consultation Form */}
           <div className="lg:col-span-7">
             <div className="glass-panel p-8 sm:p-10 lg:p-12 rounded-3xl relative">
-              {submittedCode ? (
-                /* Success Screen */
-                <div className="py-12 flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-300">
-                  <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-6 border border-emerald-500/30">
-                    <CheckCircle2 className="w-8 h-8" />
+              {draftReady ? (
+                <div className="py-8 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-full bg-sky-500/20 text-sky-300 flex items-center justify-center mb-6 border border-sky-500/30">
+                    <MessageSquare className="w-8 h-8" />
                   </div>
-
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">
-                    Yêu cầu đã được gửi thành công!
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
+                    Nội dung tư vấn đã sẵn sàng
                   </h3>
-
-                  <p className="text-sm text-[#eef4ff]/80 max-w-md mb-6 leading-relaxed">
-                    Cảm ơn <strong>{fullName}</strong>. Chuyên viên của KHỞI AGENCY sẽ liên hệ qua số điện thoại / Zalo <strong>{phone}</strong> trong vòng 2 giờ làm việc để tư vấn giải pháp chi tiết.
+                  <p className="text-sm text-[#eef4ff]/80 max-w-lg mb-6 leading-relaxed">
+                    Biểu mẫu hiện chưa kết nối hệ thống nhận yêu cầu trực tuyến, vì vậy <strong>thông tin chưa được gửi đi</strong>.
+                    Hãy sao chép nội dung bên dưới và chuyển tới kênh liên hệ chính thức của KHỞI AGENCY.
                   </p>
-
-                  <div className="p-4 rounded-2xl bg-white/5 border border-white/10 mb-8 max-w-sm w-full">
-                    <div className="text-xs text-[#eef4ff]/60 uppercase tracking-wider mb-1">
-                      Mã hồ sơ tư vấn của bạn
-                    </div>
-                    <div className="text-xl font-mono font-bold text-[#a8c8ff] tracking-wider">
-                      #{submittedCode}
-                    </div>
+                  <div className="p-5 rounded-2xl bg-white/5 border border-white/15 mb-5 w-full text-left">
+                    <p className="text-sm text-white whitespace-pre-wrap break-words select-text">{draftSummary}</p>
                   </div>
-
+                  {copyFeedback && (
+                    <p role="status" className="text-sm text-[#a8c8ff] mb-4">{copyFeedback}</p>
+                  )}
                   <div className="flex flex-wrap items-center justify-center gap-3">
-                    <a
-                      href={AGENCY_CONTACT.zaloUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-6 py-3 rounded-full font-bold text-xs sm:text-sm bg-[#a8c8ff] text-[#023287] hover:bg-white transition-colors"
-                    >
-                      Nhắn tin Zalo trực tiếp ngay
-                    </a>
-                    <button
-                      type="button"
-                      onClick={handleReset}
-                      className="px-6 py-3 rounded-full font-semibold text-xs sm:text-sm border border-white/20 text-white hover:bg-white/10 transition-colors"
-                    >
-                      Gửi yêu cầu khác
+                    <button type="button" onClick={handleCopy}
+                      className="px-6 py-3 rounded-full font-bold text-sm bg-[#a8c8ff] text-[#023287] hover:bg-white transition-colors">
+                      Sao chép yêu cầu
+                    </button>
+                    <button type="button" onClick={handleReset}
+                      className="px-6 py-3 rounded-full font-semibold text-sm border border-white/20 text-white hover:bg-white/10 transition-colors">
+                      Chỉnh sửa thông tin
                     </button>
                   </div>
                 </div>
@@ -254,6 +252,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialServiceOr
                         value={selectedPackage}
                         onChange={(e) => setSelectedPackage(e.target.value)}
                       >
+                        {selectedPackage && ![
+                          'Combo Bứt Phá (Khuyên dùng)', 'Combo Khởi Đầu', 'Combo Toàn Diện',
+                          'Chụp ảnh sản phẩm & Lifestyle', 'Quay video quảng cáo (Reels/TikTok)',
+                          'Thiết kế nhận diện thương hiệu', 'Content & Quản trị Fanpage',
+                          'Chạy quảng cáo tối ưu (Ads)', 'Dự toán tùy chỉnh theo nhu cầu',
+                        ].includes(selectedPackage) && <option value={selectedPackage}>{selectedPackage}</option>}
                         <option value="Combo Bứt Phá (Khuyên dùng)">Combo Bứt Phá (Khuyên dùng)</option>
                         <option value="Combo Khởi Đầu">Combo Khởi Đầu</option>
                         <option value="Combo Toàn Diện">Combo Toàn Diện</option>
@@ -292,23 +296,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialServiceOr
                     />
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full mt-2 inline-flex items-center justify-center gap-2 py-4 px-6 rounded-full font-bold text-sm bg-gradient-to-r from-[#a8c8ff] to-[#e4e4e4] text-[#023287] hover:shadow-[0_0_35px_rgba(168,200,255,0.7)] transition-all disabled:opacity-50 cursor-pointer"
-                  >
-                    {isSubmitting ? (
-                      <span>Đang gửi thông tin...</span>
-                    ) : (
-                      <>
-                        <span>Gửi yêu cầu nhận tư vấn miễn phí</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </>
-                    )}
+                  <button type="submit"
+                    className="w-full mt-2 inline-flex items-center justify-center gap-2 py-4 px-6 rounded-full font-bold text-sm bg-gradient-to-r from-[#a8c8ff] to-[#e4e4e4] text-[#023287] hover:shadow-[0_0_35px_rgba(168,200,255,0.7)] transition-all cursor-pointer">
+                    <span>Chuẩn bị yêu cầu tư vấn</span>
+                    <ArrowRight className="w-4 h-4" />
                   </button>
 
                   <p className="text-[11px] text-center text-[#eef4ff]/60 mt-3">
-                    KHỞI cam kết bảo mật 100% thông tin liên hệ và số điện thoại của bạn.
+                    Chưa gửi tự động: bạn sẽ được xem lại và tự lựa chọn kênh gửi thông tin.
                   </p>
                 </form>
               )}

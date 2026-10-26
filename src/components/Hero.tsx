@@ -121,7 +121,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenConsultation }) => {
             {/* Logo Emblem Icon */}
             <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white p-2 shadow-2xl shadow-[#022a8a]/60 mb-3 flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:scale-105">
               <img
-                src="/logo.png"
+                src="./logo.png"
                 alt="Logo KHỞI AGENCY"
                 className="w-full h-full object-cover rounded-full"
               />

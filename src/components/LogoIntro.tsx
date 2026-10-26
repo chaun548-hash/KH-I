@@ -118,7 +118,7 @@ export const LogoIntro: React.FC<LogoIntroProps> = ({ onIntroComplete, isOpen, o
           {/* Logo Container with Shimmer Light Sweep */}
           <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-white p-2.5 shadow-2xl shadow-[#004bd4]/50 overflow-hidden flex items-center justify-center">
             <img
-              src="/logo.png"
+              src="./logo.png"
               alt="KHỞI AGENCY Logo"
               className="w-full h-full object-cover rounded-full select-none"
             />
