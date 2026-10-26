@@ -24,7 +24,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialServiceOr
         setSelectedPackage('Dự toán tùy chỉnh theo nhu cầu');
         setMessage(initialServiceOrPackage);
       } else {
-        setSelectedPackage(initialServiceOrPackage);
+        const comboNames: Record<string, string> = {
+          'Khởi Đầu': 'Combo Khởi Đầu',
+          'Bứt Phá': 'Combo Bứt Phá (Khuyên dùng)',
+          'Toàn Diện': 'Combo Toàn Diện',
+        };
+        setSelectedPackage(comboNames[initialServiceOrPackage] || initialServiceOrPackage);
       }
     }
   }, [initialServiceOrPackage]);
@@ -66,10 +71,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialServiceOr
   const handleReset = () => {
     setDraftReady(false);
     setCopyFeedback('');
-    setFullName('');
-    setPhone('');
-    setEmail('');
-    setMessage('');
   };
 
   return (
@@ -92,7 +93,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialServiceOr
             </h2>
 
             <p className="mt-4 text-base text-[#eef4ff]/80 leading-relaxed">
-              Để lại thông tin, đội ngũ KHỞI AGENCY sẽ liên hệ trong vòng 2 giờ để tư vấn ý tưởng và gửi bảng kế hoạch sơ bộ miễn phí cho thương hiệu của bạn.
+              Điền thông tin để chuẩn bị yêu cầu tư vấn. Sau đó, bạn có thể sao chép nội dung và chủ động liên hệ KHỞI AGENCY qua kênh chính thức.
             </p>
 
             {/* Direct contact coordinates */}

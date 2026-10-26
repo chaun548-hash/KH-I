@@ -236,7 +236,7 @@ export const CostCalculator: React.FC<CostCalculatorProps> = ({ onApplyEstimate 
                     onClick={handleSendToConsultation}
                     className="w-full mt-4 flex items-center justify-center gap-2 py-3.5 px-6 rounded-full font-bold text-sm bg-gradient-to-r from-[#60a5fa] via-[#38bdf8] to-white text-[#010926] hover:shadow-[0_0_30px_rgba(56,189,248,0.6)] transition-all cursor-pointer"
                   >
-                    <span>Gửi dự toán này cho KHỞI</span>
+                    <span>Đưa dự toán vào yêu cầu tư vấn</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
 
